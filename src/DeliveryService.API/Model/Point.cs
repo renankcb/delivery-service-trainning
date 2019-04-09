@@ -1,25 +1,22 @@
-﻿namespace DeliveryService.API.Model
+﻿using System.Collections.Generic;
+
+namespace DeliveryService.API.Model
 {
     public class Point
     {
-        public Point (int id, string name, int time, int cost)
+        public Point (int id, string name)
         {
             Id = id;
             Name = name;
-            Time = time;
-            Cost = cost;
+            RoutePoints = new List<RoutePoints>();
         }
 
-        public Point()
-        {
-        }
+        public Point() { }
 
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public int Time { get; set; }
-
-        public int Cost { get; set; }
+        public ICollection<RoutePoints> RoutePoints { get; set; }
     }
 }

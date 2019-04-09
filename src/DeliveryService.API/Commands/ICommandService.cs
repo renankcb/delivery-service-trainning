@@ -1,14 +1,16 @@
-﻿using DeliveryService.API.Model;
+﻿using DeliveryService.API.Dto;
+using DeliveryService.API.Model;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace DeliveryService.API.Commands
 {
-    public interface ICommandService
+    public interface ICommandService<T>
     {
-        Task<Point> SavePoint(string name, int time, int cost);
+        Task<ResultResponse<T>> Save(T point);
 
-        Task<Point> UpdatePoint(int id, string name, int time, int cost);
+        Task<ResultResponse<T>> Update(T point);
 
-        Task<Point> DeletePoint(int id);
+        Task<ResultResponse<T>> Delete(int id);
     }
 }

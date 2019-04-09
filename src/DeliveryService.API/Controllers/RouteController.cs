@@ -5,40 +5,39 @@ using DeliveryService.API.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DeliveryService.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PointController : ControllerBase
+    public class RouteController : ControllerBase
     {
-        private readonly AbstractQueriesService<Point> _queries;
+        private readonly AbstractQueriesService<Route> _queries;
 
-        private readonly ICommandService<Point> _commands;
+        private readonly ICommandService<Route> _commands;
 
-        public PointController(AbstractQueriesService<Point> queries, ICommandService<Point> commands)
+        public RouteController(AbstractQueriesService<Route> queries, ICommandService<Route> commands)
         {
             _queries = queries ?? throw new ArgumentNullException(nameof(queries));
             _commands = commands ?? throw new ArgumentNullException(nameof(commands));
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResultResponse<IEnumerable<Point>>>> Get()
+        public async Task<ActionResult<ResultResponse<IEnumerable<Route>>>> Get()
         {
             return await _queries.GetAll();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<ResultResponse<Point>>> Get(int id)
+        public async Task<ActionResult<ResultResponse<Route>>> Get(int id)
         {
             return await _queries.GetById(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResultResponse<Point>>> Post(PostPointDto value)
+        public async Task<ActionResult<ResultResponse<Route>>> Post(PostRouteDto value)
         {
             if (!value.IsValid())
             {
@@ -53,7 +52,7 @@ namespace DeliveryService.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ResultResponse<Point>>> Put(PostPointDto value)
+        public async Task<ActionResult<ResultResponse<Route>>> Put(PostRouteDto value)
         {
             if (!value.IsValid())
             {
@@ -69,7 +68,7 @@ namespace DeliveryService.API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult<ResultResponse<Point>>> Delete(int id)
+        public async Task<ActionResult<ResultResponse<Route>>> Delete(int id)
         {
             return await _commands.Delete(id);
         }

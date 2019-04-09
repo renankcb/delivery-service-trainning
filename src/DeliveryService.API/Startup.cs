@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace DeliveryService.API
 {
@@ -23,8 +22,10 @@ namespace DeliveryService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IQueriesService, QueriesService>(ctor => new QueriesService(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<ICommandService, CommandService>();
+            services.AddScoped<AbstractQueriesService<Point>, PointQueriesService>(ctor => new PointQueriesService(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<AbstractQueriesService<Route>, RouteQueriesService>(ctor => new RouteQueriesService(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<ICommandService<Point>, PointCommandService>();
+            services.AddScoped<ICommandService<Route>, RouteCommandService>();
 
             services.AddDbContext<DeliveryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
