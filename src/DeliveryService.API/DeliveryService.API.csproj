@@ -10,6 +10,28 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190409225707_firstmigration.cs" />
     <Compile Remove="Migrations\20190409225707_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190409230430_firstmigration.cs" />
+    <Compile Remove="Migrations\20190409230430_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410174144_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410174144_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410174716_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410174716_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410174935_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410174935_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410175028_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410175028_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410181153_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410181153_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410181552_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410181552_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410182031_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410182031_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410183133_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410183133_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410185321_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410185321_firstmigration.Designer.cs" />
+    <Compile Remove="Migrations\20190410190739_firstmigration.cs" />
+    <Compile Remove="Migrations\20190410190739_firstmigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

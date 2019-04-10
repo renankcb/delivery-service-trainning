@@ -21,6 +21,6 @@ namespace DeliveryService.API.Queries
 
         public abstract Task<ResultResponse<T>> GetById(int id);
 
-        public abstract Task<ResultResponse<IEnumerable<T>>> GetAll();
+        public abstract Task<ResultResponse<IEnumerable<T>>> GetAllAsync();
     }
 }

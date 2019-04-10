@@ -1,5 +1,4 @@
-﻿using System;
-using DeliveryService.API.Model;
+﻿using DeliveryService.API.Model;
 
 namespace DeliveryService.API.Dto
 {
@@ -16,7 +15,7 @@ namespace DeliveryService.API.Dto
 
         internal Point ToDomain()
         {
-            return new Point(this.Id, this.Name);
+            return new Point() { Id = this.Id, Name = this.Name };
         }
     }
 }

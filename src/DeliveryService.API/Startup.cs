@@ -23,9 +23,9 @@ namespace DeliveryService.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<AbstractQueriesService<Point>, PointQueriesService>(ctor => new PointQueriesService(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<AbstractQueriesService<Route>, RouteQueriesService>(ctor => new RouteQueriesService(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<AbstractQueriesService<PointsConnection>, PointsConnectionQueriesService>(ctor => new PointsConnectionQueriesService(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<ICommandService<Point>, PointCommandService>();
-            services.AddScoped<ICommandService<Route>, RouteCommandService>();
+            services.AddScoped<ICommandService<PointsConnection>, PointsConnectionCommandService>();
 
             services.AddDbContext<DeliveryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

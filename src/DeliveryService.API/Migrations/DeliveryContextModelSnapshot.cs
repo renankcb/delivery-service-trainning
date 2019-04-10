@@ -27,16 +27,12 @@ namespace DeliveryService.API.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("RouteId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RouteId");
 
                     b.ToTable("Points");
                 });
 
-            modelBuilder.Entity("DeliveryService.API.Model.Route", b =>
+            modelBuilder.Entity("DeliveryService.API.Model.PointsConnection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,57 +52,18 @@ namespace DeliveryService.API.Migrations
 
                     b.HasIndex("OriginId");
 
-                    b.ToTable("Routes");
+                    b.ToTable("PointsConnection");
                 });
 
-            modelBuilder.Entity("DeliveryService.API.Model.RoutePoints", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("PointId");
-
-                    b.Property<int>("RouteId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PointId");
-
-                    b.HasIndex("RouteId");
-
-                    b.ToTable("RoutePoints");
-                });
-
-            modelBuilder.Entity("DeliveryService.API.Model.Point", b =>
-                {
-                    b.HasOne("DeliveryService.API.Model.Route")
-                        .WithMany("IntermidiatePoints")
-                        .HasForeignKey("RouteId");
-                });
-
-            modelBuilder.Entity("DeliveryService.API.Model.Route", b =>
+            modelBuilder.Entity("DeliveryService.API.Model.PointsConnection", b =>
                 {
                     b.HasOne("DeliveryService.API.Model.Point", "Destination")
-                        .WithMany()
+                        .WithMany("Destinations")
                         .HasForeignKey("DestinationId");
 
                     b.HasOne("DeliveryService.API.Model.Point", "Origin")
-                        .WithMany()
+                        .WithMany("Origins")
                         .HasForeignKey("OriginId");
-                });
-
-            modelBuilder.Entity("DeliveryService.API.Model.RoutePoints", b =>
-                {
-                    b.HasOne("DeliveryService.API.Model.Point", "Point")
-                        .WithMany("RoutePoints")
-                        .HasForeignKey("PointId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DeliveryService.API.Model.Route", "Route")
-                        .WithMany("RoutePoints")
-                        .HasForeignKey("RouteId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

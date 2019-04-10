@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.API.Queries
 {
-    public class PointQueriesService : AbstractQueriesService<Point>
+    public class PointsConnectionQueriesService : AbstractQueriesService<PointsConnection>
     {
-        public PointQueriesService(string connectionString) : base(connectionString) { }
+        public PointsConnectionQueriesService(string connectionString) : base(connectionString) { }
 
-        public async override Task<ResultResponse<IEnumerable<Point>>> GetAllAsync()
+        public override async Task<ResultResponse<IEnumerable<PointsConnection>>> GetAllAsync()
         {
-            ResultResponse<IEnumerable<Point>> result = new ResultResponse<IEnumerable<Point>>();
+            ResultResponse<IEnumerable<PointsConnection>> result = new ResultResponse<IEnumerable<PointsConnection>>();
 
             try
             {
@@ -23,9 +23,9 @@ namespace DeliveryService.API.Queries
                 {
                     await conn.OpenAsync();
 
-                    var query = @"SELECT Id, Name FROM dbo.Points;";
+                    var query = @"SELECT Id, OriginId, DestinationId, Time, Cost FROM dbo.PointsConnection;";
 
-                    var resultFromDb = await conn.QueryAsync<Point>(query);
+                    var resultFromDb = await conn.QueryAsync<PointsConnection>(query);
                     result.Success = true;
                     result.Data = resultFromDb;
                 }
@@ -39,9 +39,9 @@ namespace DeliveryService.API.Queries
             return result;
         }
 
-        public async override Task<ResultResponse<Point>> GetById(int id)
+        public override async Task<ResultResponse<PointsConnection>> GetById(int id)
         {
-            ResultResponse<Point> result = new ResultResponse<Point>();
+            ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
 
             try
             {
@@ -49,9 +49,9 @@ namespace DeliveryService.API.Queries
                 {
                     await conn.OpenAsync();
 
-                    string query = @"SELECT Id, Name FROM dbo.Points WHERE Id = @ID;";
+                    string query = @"SELECT Id, OriginId, DestinationId, Time, Cost FROM dbo.PointsConnection WHERE Id = @ID;";
 
-                    var resultFromDb = await conn.QueryAsync<Point>(query, new { ID = id });
+                    var resultFromDb = await conn.QueryAsync<PointsConnection>(query, new { ID = id });
                     if (!resultFromDb.Any())
                     {
                         throw new Exception("Register not found");

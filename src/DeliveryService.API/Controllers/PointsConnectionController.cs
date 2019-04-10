@@ -11,33 +11,33 @@ namespace DeliveryService.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PointController : ApiController
+    public class PointsConnectionController : ApiController
     {
-        private readonly AbstractQueriesService<Point> _queries;
+        private readonly AbstractQueriesService<PointsConnection> _queries;
 
-        private readonly ICommandService<Point> _commands;
+        private readonly ICommandService<PointsConnection> _commands;
 
-        public PointController(AbstractQueriesService<Point> queries, ICommandService<Point> commands)
+        public PointsConnectionController(AbstractQueriesService<PointsConnection> queries, ICommandService<PointsConnection> commands)
         {
             _queries = queries ?? throw new ArgumentNullException(nameof(queries));
             _commands = commands ?? throw new ArgumentNullException(nameof(commands));
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResultResponse<IEnumerable<Point>>>> Get()
+        public async Task<ActionResult<ResultResponse<IEnumerable<PointsConnection>>>> Get()
         {
             return await _queries.GetAllAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<ResultResponse<Point>>> Get(int id)
+        public async Task<ActionResult<ResultResponse<PointsConnection>>> Get(int id)
         {
             return await _queries.GetById(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResultResponse<Point>>> Post(PostPointDto value)
+        public async Task<ActionResult<ResultResponse<PointsConnection>>> Post(PostPointsConnectionDto value)
         {
             if (!value.IsValid())
                 return ReturnBadRequest();
@@ -46,7 +46,7 @@ namespace DeliveryService.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ResultResponse<Point>>> Put(PostPointDto value)
+        public async Task<ActionResult<ResultResponse<PointsConnection>>> Put(PostPointsConnectionDto value)
         {
             if (!value.IsValid())
                 return ReturnBadRequest();
@@ -56,7 +56,7 @@ namespace DeliveryService.API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult<ResultResponse<Point>>> Delete(int id)
+        public async Task<ActionResult<ResultResponse<PointsConnection>>> Delete(int id)
         {
             return await _commands.Delete(id);
         }

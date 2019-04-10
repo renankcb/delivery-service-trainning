@@ -1,6 +1,4 @@
 ﻿using DeliveryService.API.Dto;
-using DeliveryService.API.Model;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace DeliveryService.API.Commands
