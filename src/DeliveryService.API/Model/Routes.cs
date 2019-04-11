@@ -20,6 +20,24 @@ namespace DeliveryService.API.Model
 
         public List<PointsConnection> Connections { get; private set; }
 
+        public List<PointsConnection> BestTimeRout
+        {
+            get
+            {
+                var routesTime = RoutesAvailable.Select(rt => rt.Sum(conn => conn.Time));
+                return RoutesAvailable.Find(pc => pc.Sum(conn => conn.Time) == routesTime.Min());
+            }
+        }
+
+        public List<PointsConnection> BestCostRout
+        {
+            get
+            {
+                var routesCosts = RoutesAvailable.Select(rt => rt.Sum(conn => conn.Cost));
+                return RoutesAvailable.Find(pc => pc.Sum(conn => conn.Cost) == routesCosts.Min());
+            }
+        }
+
         public List<List<PointsConnection>> RoutesAvailable { get; private set; }
 
         private void FindRoutes(int originId, List<PointsConnection> visitedPoints)
@@ -30,17 +48,19 @@ namespace DeliveryService.API.Model
 
                 foreach (var pc in currentOriginChildren)
                 {
-                    if (HasNoIntermidiatePoints(visitedPoints, pc))
-                        break;
+                    if (visitedPoints.Any() || pc.DestinationId != DestinationId)
+                    {
+                        var currentOrigin = Connections.Find(pci => pci.Id == pc.Id);
+                        visitedPoints.Add(currentOrigin);
 
-                    var currentOrigin = Connections.Find(pci => pci.Id == pc.Id);
-                    visitedPoints.Add(currentOrigin);
+                        if (pc.DestinationId == DestinationId)
+                            RoutesAvailable.Add(visitedPoints.ToList());
 
-                    if (IsFinalDestination(pc))
-                        RoutesAvailable.Add(visitedPoints.ToList());
+                        FindRoutes(pc.DestinationId.Value, visitedPoints);
+                        visitedPoints.Remove(currentOrigin);
 
-                    FindRoutes(pc.DestinationId.Value, visitedPoints);
-                    visitedPoints.Remove(currentOrigin);
+                    }
+
                 }
 
             }
