@@ -3,6 +3,7 @@ using DeliveryService.API.Model;
 using DeliveryService.API.Queries;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DeliveryService.API.Services
@@ -16,18 +17,24 @@ namespace DeliveryService.API.Services
             _queriesRepository = queries ?? throw new ArgumentNullException(nameof(queries));
         }
 
-        public async Task<ResultResponse<IEnumerable<RouteResponse>>> GetRouteFromOriginToDestination(int originId, int destinationId)
+        public async Task<ResultResponse<Routes>> GetRouteFromOriginToDestination(int originId, int destinationId)
         {
-            var result = new ResultResponse<IEnumerable<RouteResponse>>();
+            var result = new ResultResponse<Routes>();
 
-            result.Success = true;
-            var connections = await _queriesRepository.GetAllAsync();
-            List<PointsPathDto> pointsPath = BuildDto(connections);
+            try
+            {
+                var connections = await _queriesRepository.GetAllAsync();
 
+                var routes = new Routes(originId, destinationId, connections.ToList());
 
-
-            result.Data = new List<RouteResponse>() { new RouteResponse() { Test = "foi" } };
-            return result;
+                result.Success = true;
+                result.Data = routes;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private List<PointsPathDto> BuildDto(IEnumerable<PointsConnection> connections)
@@ -47,9 +54,25 @@ namespace DeliveryService.API.Services
             return result;
         }
 
-        private void FindRoute(int originId, int destinationId, List<PointsPathDto> pointsConnection, List<PointsPathDto> visitedPoints)
+        private void FindRoute(int originId, int destinationId, List<PointsPathDto> allPaths, List<PointsPathDto> visitedPoints, List<List<PointsPathDto>> allRoutes)
         {
+            if (originId != destinationId)
+            {
+                var currentOriginChildren = allPaths.FindAll(pc => pc.OriginPointId == originId);
 
+                foreach (var pc in currentOriginChildren)
+                {
+                    var currentOrigin = allPaths.Find(pci => pci.Id == pc.Id);
+                    visitedPoints.Add(currentOrigin);
+
+                    if (pc.DestinationPointId == destinationId)
+                        allRoutes.Add(visitedPoints.ToList());
+
+                    FindRoute(pc.DestinationPointId, destinationId, allPaths, visitedPoints, allRoutes);
+                    visitedPoints.Remove(currentOrigin);
+                }
+
+            }
         }
     }
 }

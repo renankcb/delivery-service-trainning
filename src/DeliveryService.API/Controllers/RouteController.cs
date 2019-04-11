@@ -1,4 +1,5 @@
 ﻿using DeliveryService.API.Dto;
+using DeliveryService.API.Model;
 using DeliveryService.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,9 +21,19 @@ namespace DeliveryService.API.Controllers
 
         [HttpGet]
         [Route("getRouteFromOriginToDestination")]
-        public async Task<ActionResult<ResultResponse<IEnumerable<RouteResponse>>>> Get([FromQuery(Name = "originId")] int originId, [FromQuery(Name = "destinationId")]int destinationId)
+        public async Task<ActionResult<ResultResponse<Routes>>> Get([FromQuery(Name = "originId")] int originId, [FromQuery(Name = "destinationId")]int destinationId)
         {
-            return await _service.GetRouteFromOriginToDestination(originId, destinationId);
+            try
+            {
+                if (originId == 0 || destinationId == 0)
+                    throw new ArgumentException("Invalid Data!");
+
+                return await _service.GetRouteFromOriginToDestination(originId, destinationId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }
