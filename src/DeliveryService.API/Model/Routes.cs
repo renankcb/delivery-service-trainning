@@ -48,12 +48,12 @@ namespace DeliveryService.API.Model
 
                 foreach (var pc in currentOriginChildren)
                 {
-                    if (visitedPoints.Any() || pc.DestinationId != DestinationId)
+                    if (HasIntermidiatePoints(visitedPoints, pc))
                     {
                         var currentOrigin = Connections.Find(pci => pci.Id == pc.Id);
                         visitedPoints.Add(currentOrigin);
 
-                        if (pc.DestinationId == DestinationId)
+                        if (IsFinalDestination(pc))
                             RoutesAvailable.Add(visitedPoints.ToList());
 
                         FindRoutes(pc.DestinationId.Value, visitedPoints);
@@ -66,14 +66,8 @@ namespace DeliveryService.API.Model
             }
         }
 
-        private bool IsFinalDestination(PointsConnection pc)
-        {
-            return pc.DestinationId == DestinationId;
-        }
+        private bool IsFinalDestination(PointsConnection pc) => pc.DestinationId == DestinationId;
 
-        private bool HasNoIntermidiatePoints(List<PointsConnection> visitedPoints, PointsConnection pc)
-        {
-            return !visitedPoints.Any() && pc.DestinationId == DestinationId;
-        }
+        private bool HasIntermidiatePoints(List<PointsConnection> visitedPoints, PointsConnection pc) => visitedPoints.Any() || pc.DestinationId != DestinationId;
     }
 }
