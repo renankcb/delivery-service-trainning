@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DeliveryService.API.Model
 {
@@ -13,5 +14,15 @@ namespace DeliveryService.API.Model
         public ICollection<PointsConnection> Origins { get; set; }
 
         public ICollection<PointsConnection> Destinations { get; set; }
+
+        internal bool Any()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Point FirstOrDefault()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

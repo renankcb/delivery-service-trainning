@@ -1,15 +1,14 @@
-﻿using DeliveryService.API.Dto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DeliveryService.API.Queries
 {
-    public abstract class AbstractQueriesService<T>
+    public abstract class AbstractQueriesRepository<T>
     {
         protected readonly string _connectionString;
 
-        public AbstractQueriesService(string connectionString)
+        public AbstractQueriesRepository(string connectionString)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -19,8 +18,8 @@ namespace DeliveryService.API.Queries
             _connectionString = connectionString;
         }
 
-        public abstract Task<ResultResponse<T>> GetById(int id);
+        public abstract Task<IEnumerable<T>> GetAllAsync();
 
-        public abstract Task<ResultResponse<IEnumerable<T>>> GetAllAsync();
+        public abstract Task<T> GetById(int id);
     }
 }

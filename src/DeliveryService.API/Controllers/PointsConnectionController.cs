@@ -1,7 +1,6 @@
-﻿using DeliveryService.API.Commands;
-using DeliveryService.API.Dto;
+﻿using DeliveryService.API.Dto;
 using DeliveryService.API.Model;
-using DeliveryService.API.Queries;
+using DeliveryService.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,27 +12,24 @@ namespace DeliveryService.API.Controllers
     [ApiController]
     public class PointsConnectionController : ApiController
     {
-        private readonly AbstractQueriesService<PointsConnection> _queries;
+        private readonly AbstractService<PointsConnection> _service;
 
-        private readonly ICommandService<PointsConnection> _commands;
-
-        public PointsConnectionController(AbstractQueriesService<PointsConnection> queries, ICommandService<PointsConnection> commands)
+        public PointsConnectionController(AbstractService<PointsConnection> service)
         {
-            _queries = queries ?? throw new ArgumentNullException(nameof(queries));
-            _commands = commands ?? throw new ArgumentNullException(nameof(commands));
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         [HttpGet]
         public async Task<ActionResult<ResultResponse<IEnumerable<PointsConnection>>>> Get()
         {
-            return await _queries.GetAllAsync();
+            return await _service.GetAllAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<ResultResponse<PointsConnection>>> Get(int id)
         {
-            return await _queries.GetById(id);
+            return await _service.GetById(id);
         }
 
         [HttpPost]
@@ -42,7 +38,7 @@ namespace DeliveryService.API.Controllers
             if (!value.IsValid())
                 return ReturnBadRequest();
 
-            return await _commands.Save(value.ToDomain());
+            return await _service.Save(value.ToDomain());
         }
 
         [HttpPut]
@@ -51,14 +47,14 @@ namespace DeliveryService.API.Controllers
             if (!value.IsValid())
                 return ReturnBadRequest();
 
-            return await _commands.Update(value.ToDomain());
+            return await _service.Update(value.ToDomain());
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<ResultResponse<PointsConnection>>> Delete(int id)
         {
-            return await _commands.Delete(id);
+            return await _service.Delete(id);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DeliveryService.API.Commands;
 using DeliveryService.API.Model;
 using DeliveryService.API.Queries;
+using DeliveryService.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +23,12 @@ namespace DeliveryService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<AbstractQueriesService<Point>, PointQueriesService>(ctor => new PointQueriesService(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<AbstractQueriesService<PointsConnection>, PointsConnectionQueriesService>(ctor => new PointsConnectionQueriesService(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<ICommandService<Point>, PointCommandService>();
-            services.AddScoped<ICommandService<PointsConnection>, PointsConnectionCommandService>();
+            services.AddScoped<AbstractQueriesRepository<Point>, PointQueriesRepository>(ctor => new PointQueriesRepository(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<AbstractQueriesRepository<PointsConnection>, PointsConnectionQueriesRepository>(ctor => new PointsConnectionQueriesRepository(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<ICommandRepository<Point>, PointCommandRepository>();
+            services.AddScoped<ICommandRepository<PointsConnection>, PointsConnectionCommandRepository>();
+            services.AddScoped<AbstractService<Point>, PointService>();
+            services.AddScoped<AbstractService<PointsConnection>, PointsConnectionService>();
 
             services.AddDbContext<DeliveryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
