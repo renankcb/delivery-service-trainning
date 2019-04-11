@@ -27,8 +27,9 @@ namespace DeliveryService.API
             services.AddScoped<AbstractQueriesRepository<PointsConnection>, PointsConnectionQueriesRepository>(ctor => new PointsConnectionQueriesRepository(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<ICommandRepository<Point>, PointCommandRepository>();
             services.AddScoped<ICommandRepository<PointsConnection>, PointsConnectionCommandRepository>();
-            services.AddScoped<AbstractService<Point>, PointService>();
-            services.AddScoped<AbstractService<PointsConnection>, PointsConnectionService>();
+            services.AddScoped<BaseService<Point>, PointService>();
+            services.AddScoped<BaseService<PointsConnection>, PointsConnectionService>();
+            services.AddScoped<IRoutesService, RoutesService>();
 
             services.AddDbContext<DeliveryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

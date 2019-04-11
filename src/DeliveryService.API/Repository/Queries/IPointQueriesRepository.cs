@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.API.Repository.Queries
 {
-    public interface IPointQueriesRepository<T>
+    public interface IPointQueriesRepository
     {
         Task<Point> FindByName(string name);
     }

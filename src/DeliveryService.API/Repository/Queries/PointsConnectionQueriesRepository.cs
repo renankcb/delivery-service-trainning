@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.API.Queries
 {
-    public class PointsConnectionQueriesRepository : AbstractQueriesRepository<PointsConnection>, IPointsConnectionQueriesService<PointsConnection>
+    public class PointsConnectionQueriesRepository : AbstractQueriesRepository<PointsConnection>, IPointsConnectionQueriesService
     {
         public PointsConnectionQueriesRepository(string connectionString) : base(connectionString) { }
 
@@ -40,7 +40,7 @@ namespace DeliveryService.API.Queries
             }
         }
 
-        public async Task<PointsConnection> FindByOriginAndDestination(int? originId, int? destinationId)
+        public async Task<IEnumerable<PointsConnection>> FindByOriginAndDestination(int? originId, int? destinationId)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
@@ -50,7 +50,7 @@ namespace DeliveryService.API.Queries
 
                 var resultFromDb = await conn.QueryAsync<PointsConnection>(query, new { ORIGIN_ID = originId, DESTINATION_ID = destinationId });
 
-                return resultFromDb.FirstOrDefault();
+                return resultFromDb;
             }
         }
     }

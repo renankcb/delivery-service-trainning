@@ -1,20 +1,22 @@
 ﻿using DeliveryService.API.Commands;
 using DeliveryService.API.Dto;
+using DeliveryService.API.Exceptions;
 using DeliveryService.API.Model;
 using DeliveryService.API.Queries;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DeliveryService.API.Services
 {
-    public class PointsConnectionService : AbstractService<PointsConnection>
+    public class PointsConnectionService : BaseService<PointsConnection>, IService<PointsConnection>, IPointsConnectionService
     {
         public PointsConnectionService(AbstractQueriesRepository<PointsConnection> queries, ICommandRepository<PointsConnection> commands) : base(queries, commands)
         {
         }
 
-        public override async Task<ResultResponse<IEnumerable<PointsConnection>>> GetAllAsync()
+        public async Task<ResultResponse<IEnumerable<PointsConnection>>> GetAllAsync()
         {
             ResultResponse<IEnumerable<PointsConnection>> result = new ResultResponse<IEnumerable<PointsConnection>>();
 
@@ -23,17 +25,16 @@ namespace DeliveryService.API.Services
                 var resultFromDb = await _queriesRepository.GetAllAsync();
                 result.Success = true;
                 result.Data = resultFromDb;
+
+                return result;
             }
             catch (Exception ex)
             {
-                result.Success = false;
-                result.Message = ex.Message;
+                throw ex;
             }
-
-            return result;
         }
 
-        public override async Task<ResultResponse<PointsConnection>> GetById(int id)
+        public async Task<ResultResponse<PointsConnection>> GetById(int id)
         {
             ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
 
@@ -42,24 +43,23 @@ namespace DeliveryService.API.Services
                 var resultFromDb = await _queriesRepository.GetById(id);
                 if (resultFromDb == null)
                 {
-                    throw new Exception("Register not found");
+                    throw new NotFoundException();
                 }
                 else
                 {
                     result.Success = true;
                     result.Data = resultFromDb;
                 }
+
+                return result;
             }
             catch (Exception ex)
             {
-                result.Success = false;
-                result.Message = ex.Message;
+                throw ex;
             }
-
-            return result;
         }
 
-        public override async Task<ResultResponse<PointsConnection>> Save(PointsConnection connectionPoint)
+        public async Task<ResultResponse<PointsConnection>> Save(PointsConnection connectionPoint)
         {
             ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
 
@@ -68,26 +68,26 @@ namespace DeliveryService.API.Services
                 var currentPointsConnection = await ((PointsConnectionQueriesRepository)_queriesRepository)
                                                 .FindByOriginAndDestination(connectionPoint.OriginId, connectionPoint.DestinationId);
 
-                if (currentPointsConnection != null)
+                if (currentPointsConnection.Any())
                 {
-                    throw new Exception("Connection already existes");
+                    throw new InvalidOperationException("Connection already existes");
                 }
 
                 await _commandsRepository.Save(connectionPoint);
 
                 result.Success = true;
                 result.Data = connectionPoint;
+
+                return result;
             }
             catch (Exception ex)
             {
-                result.Success = false;
-                result.Message = ex.Message;
+                throw ex;
             }
 
-            return result;
         }
 
-        public override async Task<ResultResponse<PointsConnection>> Update(PointsConnection point)
+        public async Task<ResultResponse<PointsConnection>> Update(PointsConnection point)
         {
             ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
 
@@ -108,17 +108,16 @@ namespace DeliveryService.API.Services
                 result.Success = true;
                 result.Data = await _commandsRepository.Update(currentPointsConnection);
 
+                return result;
             }
             catch (Exception ex)
             {
-                result.Success = false;
-                result.Message = ex.Message;
+                throw ex;
             }
 
-            return result;
         }
 
-        public override async Task<ResultResponse<PointsConnection>> Delete(int id)
+        public async Task<ResultResponse<PointsConnection>> Delete(int id)
         {
             ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
 
@@ -134,14 +133,19 @@ namespace DeliveryService.API.Services
                 await _commandsRepository.Delete(currentPointsConnection);
 
                 result.Success = true;
+                return result;
             }
             catch (Exception ex)
             {
-                result.Success = false;
-                result.Message = ex.Message;
+                throw ex;
             }
 
-            return result;
+        }
+
+        public async Task<IEnumerable<PointsConnection>> FindByOriginAndDestination(int originId, int destinationId)
+        {
+            return await ((PointsConnectionQueriesRepository)_queriesRepository)
+                                                .FindByOriginAndDestination(originId, destinationId);
         }
     }
 }

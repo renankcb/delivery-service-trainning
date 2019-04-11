@@ -1,4 +1,5 @@
 ﻿using DeliveryService.API.Dto;
+using DeliveryService.API.Exceptions;
 using DeliveryService.API.Model;
 using DeliveryService.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,11 @@ namespace DeliveryService.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PointController : ApiController
+    public class PointController : ControllerBase
     {
-        private readonly AbstractService<Point> _service;
+        private readonly BaseService<Point> _service;
 
-        public PointController(AbstractService<Point> service)
+        public PointController(BaseService<Point> service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
@@ -22,39 +23,74 @@ namespace DeliveryService.API.Controllers
         [HttpGet]
         public async Task<ActionResult<ResultResponse<IEnumerable<Point>>>> Get()
         {
-            return await _service.GetAllAsync();
+            try
+            {
+                return await ((PointService)_service).GetAllAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<ResultResponse<Point>>> Get(int id)
         {
-            return await _service.GetById(id);
+            try
+            {
+                return await ((PointService)_service).GetById(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<ResultResponse<Point>>> Post(PostPointDto value)
         {
             if (!value.IsValid())
-                return ReturnBadRequest();
+                return BadRequest("Invalida data!");
 
-            return await _service.Save(value.ToDomain());
+            try
+            {
+                return await ((PointService)_service).Save(value.ToDomain());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpPut]
         public async Task<ActionResult<ResultResponse<Point>>> Put(PostPointDto value)
         {
             if (!value.IsValid())
-                return ReturnBadRequest();
+                return BadRequest("Invalida data!");
 
-            return await _service.Update(value.ToDomain());
+            try
+            {
+                return await ((PointService)_service).Update(value.ToDomain());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<ResultResponse<Point>>> Delete(int id)
         {
-            return await _service.Delete(id);
+            try
+            {
+                return await ((PointService)_service).Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

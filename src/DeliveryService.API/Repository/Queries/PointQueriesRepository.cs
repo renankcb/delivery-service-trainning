@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.API.Queries
 {
-    public class PointQueriesRepository : AbstractQueriesRepository<Point>, IPointQueriesRepository<Point>
+    public class PointQueriesRepository : AbstractQueriesRepository<Point>, IPointQueriesRepository
     {
         public PointQueriesRepository(string connectionString) : base(connectionString) { }
 
