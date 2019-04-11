@@ -1,6 +1,5 @@
 ﻿using DeliveryService.API.Commands;
 using DeliveryService.API.Dto;
-using DeliveryService.API.Exceptions;
 using DeliveryService.API.Model;
 using DeliveryService.API.Queries;
 using System;
@@ -20,125 +19,90 @@ namespace DeliveryService.API.Services
         {
             ResultResponse<IEnumerable<PointsConnection>> result = new ResultResponse<IEnumerable<PointsConnection>>();
 
-            try
+            var resultFromDb = await _queriesRepository.GetAllAsync();
+            result.Success = true;
+            result.Data = resultFromDb;
+
+            return result;
+        }
+
+        public async Task<ResultResponse<PointsConnection>> GetByIdAsync(int id)
+        {
+            ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
+
+            var resultFromDb = await _queriesRepository.GetById(id);
+            if (resultFromDb == null)
             {
-                var resultFromDb = await _queriesRepository.GetAllAsync();
+                return null;
+            }
+            else
+            {
                 result.Success = true;
                 result.Data = resultFromDb;
+            }
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return result;
         }
 
-        public async Task<ResultResponse<PointsConnection>> GetById(int id)
+        public async Task<ResultResponse<PointsConnection>> SaveAsync(PointsConnection connectionPoint)
         {
             ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
 
-            try
+            var currentPointsConnection = await ((PointsConnectionQueriesRepository)_queriesRepository)
+                                            .FindByOriginAndDestination(connectionPoint.OriginId, connectionPoint.DestinationId);
+
+            if (currentPointsConnection.Any())
             {
-                var resultFromDb = await _queriesRepository.GetById(id);
-                if (resultFromDb == null)
-                {
-                    throw new NotFoundException();
-                }
-                else
-                {
-                    result.Success = true;
-                    result.Data = resultFromDb;
-                }
-
-                return result;
+                throw new InvalidOperationException("Connection already existes");
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
-        public async Task<ResultResponse<PointsConnection>> Save(PointsConnection connectionPoint)
-        {
-            ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
+            await _commandsRepository.Save(connectionPoint);
 
-            try
-            {
-                var currentPointsConnection = await ((PointsConnectionQueriesRepository)_queriesRepository)
-                                                .FindByOriginAndDestination(connectionPoint.OriginId, connectionPoint.DestinationId);
+            result.Success = true;
+            result.Data = connectionPoint;
 
-                if (currentPointsConnection.Any())
-                {
-                    throw new InvalidOperationException("Connection already existes");
-                }
-
-                await _commandsRepository.Save(connectionPoint);
-
-                result.Success = true;
-                result.Data = connectionPoint;
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return result;
 
         }
 
-        public async Task<ResultResponse<PointsConnection>> Update(PointsConnection point)
+        public async Task<ResultResponse<PointsConnection>> UpdateAsync(PointsConnection point)
         {
             ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
 
-            try
+            var currentPointsConnection = await _queriesRepository.GetById(point.Id);
+
+            if (currentPointsConnection == null)
             {
-                var currentPointsConnection = await _queriesRepository.GetById(point.Id);
-
-                if (currentPointsConnection == null)
-                {
-                    throw new InvalidOperationException("PointsConnection not found");
-                }
-
-                currentPointsConnection.OriginId = point.OriginId;
-                currentPointsConnection.DestinationId = point.DestinationId;
-                currentPointsConnection.Time = point.Time;
-                currentPointsConnection.Cost = point.Cost;
-
-                result.Success = true;
-                result.Data = await _commandsRepository.Update(currentPointsConnection);
-
-                return result;
+                throw new InvalidOperationException("PointsConnection not found");
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            currentPointsConnection.OriginId = point.OriginId;
+            currentPointsConnection.DestinationId = point.DestinationId;
+            currentPointsConnection.Time = point.Time;
+            currentPointsConnection.Cost = point.Cost;
+
+            result.Success = true;
+            result.Data = await _commandsRepository.Update(currentPointsConnection);
+
+            return result;
 
         }
 
-        public async Task<ResultResponse<PointsConnection>> Delete(int id)
+        public async Task<ResultResponse<PointsConnection>> DeleteAsync(int id)
         {
             ResultResponse<PointsConnection> result = new ResultResponse<PointsConnection>();
 
-            try
+            var currentPointsConnection = await _queriesRepository.GetById(id);
+
+            if (currentPointsConnection == null)
             {
-                var currentPointsConnection = await _queriesRepository.GetById(id);
-
-                if (currentPointsConnection == null)
-                {
-                    throw new InvalidOperationException("PointsConnection not found");
-                }
-
-                await _commandsRepository.Delete(currentPointsConnection);
-
-                result.Success = true;
-                return result;
+                throw new InvalidOperationException("PointsConnection not found");
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            await _commandsRepository.Delete(currentPointsConnection);
+
+            result.Success = true;
+            return result;
 
         }
 

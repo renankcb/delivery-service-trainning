@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryService.API", "Deli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryService.DL.Tests", "DeliveryService.DL.Tests\DeliveryService.DL.Tests.csproj", "{3BDCEB01-4FB6-4A03-B100-16755AE8A068}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryService.DAL.Tests", "DeliveryService.DAL.Tests\DeliveryService.DAL.Tests.csproj", "{78D00041-B2C7-4CFA-B0C1-2A628FE08F67}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{3BDCEB01-4FB6-4A03-B100-16755AE8A068}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BDCEB01-4FB6-4A03-B100-16755AE8A068}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BDCEB01-4FB6-4A03-B100-16755AE8A068}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78D00041-B2C7-4CFA-B0C1-2A628FE08F67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78D00041-B2C7-4CFA-B0C1-2A628FE08F67}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78D00041-B2C7-4CFA-B0C1-2A628FE08F67}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78D00041-B2C7-4CFA-B0C1-2A628FE08F67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

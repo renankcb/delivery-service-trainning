@@ -1,5 +1,4 @@
 ﻿using DeliveryService.API.Dto;
-using DeliveryService.API.Exceptions;
 using DeliveryService.API.Model;
 using DeliveryService.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,41 +20,45 @@ namespace DeliveryService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResultResponse<IEnumerable<Point>>>> Get()
+        public async Task<ActionResult<ResultResponse<IEnumerable<Point>>>> GetAsync()
         {
             try
             {
                 return await ((PointService)_service).GetAllAsync();
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return BadRequest("Error to retrieve data!");
             }
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<ResultResponse<Point>>> Get(int id)
+        public async Task<ActionResult<ResultResponse<Point>>> GetAsync(int id)
         {
             try
             {
-                return await ((PointService)_service).GetById(id);
+                var result = await ((PointService)_service).GetByIdAsync(id);
+                if (result == null)
+                    return NotFound();
+
+                return result;
             }
-            catch (NotFoundException ex)
+            catch
             {
-                return NotFound();
+                return BadRequest("Error to retrieve data!");
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResultResponse<Point>>> Post(PostPointDto value)
+        public async Task<ActionResult<ResultResponse<Point>>> PostAsync(PostPointDto value)
         {
             if (!value.IsValid())
                 return BadRequest("Invalida data!");
 
             try
             {
-                return await ((PointService)_service).Save(value.ToDomain());
+                return await ((PointService)_service).SaveAsync(value.ToDomain());
             }
             catch (Exception ex)
             {
@@ -71,7 +74,7 @@ namespace DeliveryService.API.Controllers
 
             try
             {
-                return await ((PointService)_service).Update(value.ToDomain());
+                return await ((PointService)_service).UpdateAsync(value.ToDomain());
             }
             catch (Exception ex)
             {
@@ -85,7 +88,7 @@ namespace DeliveryService.API.Controllers
         {
             try
             {
-                return await ((PointService)_service).Delete(id);
+                return await ((PointService)_service).DeleteAsync(id);
             }
             catch (Exception ex)
             {

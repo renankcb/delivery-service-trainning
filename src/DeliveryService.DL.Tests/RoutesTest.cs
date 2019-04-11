@@ -67,6 +67,18 @@ namespace DeliveryService.DL.Tests
             Assert.Equal(13, routes.BestCostRout.Sum(pc => pc.Cost));
         }
 
+        [Fact]
+        public void TestShouldNotReturnRoutesWithoutIntermediatePoints()
+        {
+            var originId = 1;
+            var destinationId = 3;
+            var directPointAtoC = NewMock(6, 1, 3, 2, 2);
+            var connectionTest = new List<PointsConnection>() { directPointAtoC };
+
+            var routes = new Routes(originId, destinationId, connectionTest);
+            Assert.Empty(routes.RoutesAvailable);
+        }
+
         private PointsConnection NewMock(int id, int originId, int destinationId, int time, int cost) => new PointsConnection()
         {
             Id = id,

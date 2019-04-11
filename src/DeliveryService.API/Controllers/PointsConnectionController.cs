@@ -16,7 +16,7 @@ namespace DeliveryService.API.Controllers
 
         public PointsConnectionController(BaseService<PointsConnection> service)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _service = (PointsConnectionService)service ?? throw new ArgumentNullException(nameof(service));
         }
 
         [HttpGet]
@@ -26,9 +26,9 @@ namespace DeliveryService.API.Controllers
             {
                 return await ((PointsConnectionService)_service).GetAllAsync();
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return BadRequest("Error to retireve Data!");
             }
         }
 
@@ -38,11 +38,15 @@ namespace DeliveryService.API.Controllers
         {
             try
             {
-                return await ((PointsConnectionService)_service).GetById(id);
+                var result = await ((PointsConnectionService)_service).GetByIdAsync(id);
+                if (result == null)
+                    return NotFound();
+
+                return result;
             }
             catch
             {
-                return NotFound();
+                return BadRequest("Error to retrieve register");
             }
         }
 
@@ -54,7 +58,7 @@ namespace DeliveryService.API.Controllers
 
             try
             {
-                return await ((PointsConnectionService)_service).Save(value.ToDomain());
+                return await ((PointsConnectionService)_service).SaveAsync(value.ToDomain());
             }
             catch (Exception ex)
             {
@@ -70,7 +74,7 @@ namespace DeliveryService.API.Controllers
 
             try
             {
-                return await ((PointsConnectionService)_service).Update(value.ToDomain());
+                return await ((PointsConnectionService)_service).UpdateAsync(value.ToDomain());
             }
             catch (Exception ex)
             {
@@ -84,11 +88,11 @@ namespace DeliveryService.API.Controllers
         {
             try
             {
-                return await ((PointsConnectionService)_service).Delete(id);
+                return await ((PointsConnectionService)_service).DeleteAsync(id);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return BadRequest("Error to DeleteAsync register!");
             }
         }
     }
