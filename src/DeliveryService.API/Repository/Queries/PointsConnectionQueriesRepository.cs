@@ -18,9 +18,14 @@ namespace DeliveryService.API.Queries
             {
                 await conn.OpenAsync();
 
-                var query = @"SELECT Id, OriginId, DestinationId, Time, Cost FROM dbo.PointsConnection;";
+                string query = @"select pc.Id, pc.OriginId, pc.DestinationId, pc.Time, pc.Cost, po.Id, po.Name, pd.Id, pd.Name from dbo.PointsConnection pc " +
+                "join dbo.Points po on pc.OriginId = po.Id " +
+                "join dbo.Points pd on pc.DestinationId = pd.Id";
 
-                var resultFromDb = await conn.QueryAsync<PointsConnection>(query);
+                var resultFromDb = await conn.QueryAsync<PointsConnection, Point, Point, PointsConnection>(query,
+                    (pointConnection, origin, destination) =>
+                    { pointConnection.Origin = origin; pointConnection.Destination = destination; return pointConnection; },
+                    splitOn: "Id, Id, Id");
 
                 return resultFromDb;
             }
@@ -32,9 +37,16 @@ namespace DeliveryService.API.Queries
             {
                 await conn.OpenAsync();
 
-                string query = @"SELECT Id, OriginId, DestinationId, Time, Cost FROM dbo.PointsConnection WHERE Id = @ID;";
+                string query = @"select pc.Id, pc.OriginId, pc.DestinationId, pc.Time, pc.Cost, po.Id, po.Name, pd.Id, pd.Name from dbo.PointsConnection pc " +
+                "join dbo.Points po on pc.OriginId = po.Id " +
+                "join dbo.Points pd on pc.DestinationId = pd.Id " +
+                " WHERE pc.Id = @ID;";
 
-                var resultFromDb = await conn.QueryAsync<PointsConnection>(query, new { ID = id });
+                var resultFromDb = await conn.QueryAsync<PointsConnection, Point, Point, PointsConnection>(query,
+                    (pointConnection, origin, destination) =>
+                    { pointConnection.Origin = origin; pointConnection.Destination = destination; return pointConnection; },
+                    new { ID = id },
+                    splitOn: "Id, Id, Id");
 
                 return resultFromDb.FirstOrDefault();
             }
@@ -46,9 +58,16 @@ namespace DeliveryService.API.Queries
             {
                 await conn.OpenAsync();
 
-                string query = @"SELECT Id, OriginId, DestinationId, Time, Cost FROM dbo.PointsConnection WHERE OriginId = @ORIGIN_ID AND DestinationId = @DESTINATION_ID;";
+                string query  = @"select pc.Id, pc.OriginId, pc.DestinationId, pc.Time, pc.Cost, po.Id, po.Name, pd.Id, pd.Name from dbo.PointsConnection pc " +
+                "join dbo.Points po on pc.OriginId = po.Id " + 
+                "join dbo.Points pd on pc.DestinationId = pd.Id " +
+                "WHERE OriginId = @ORIGIN_ID AND DestinationId = @DESTINATION_ID;";
 
-                var resultFromDb = await conn.QueryAsync<PointsConnection>(query, new { ORIGIN_ID = originId, DESTINATION_ID = destinationId });
+                var resultFromDb = await conn.QueryAsync<PointsConnection, Point, Point, PointsConnection>(query, 
+                    (pointConnection, origin, destination) => 
+                    { pointConnection.Origin = origin; pointConnection.Destination = destination; return pointConnection; },
+                    new { ORIGIN_ID = originId, DESTINATION_ID = destinationId },
+                    splitOn: "Id, Id, Id");
 
                 return resultFromDb;
             }
