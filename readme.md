@@ -54,15 +54,15 @@ A Delivery service to Company XPTO
 There are some data in database:
 A, B, C, D, E, F
 
-A -> B
-A -> D
-A -> C
-A -> f
-B -> C
-D -> E
-E -> C
-D -> F
-F -> E
+A -> B; 
+A -> D; 
+A -> C; 
+A -> f; 
+B -> C; 
+D -> E; 
+E -> C; 
+D -> F; 
+F -> E; 
 
 ## **RESULT**
 The response consists in:
