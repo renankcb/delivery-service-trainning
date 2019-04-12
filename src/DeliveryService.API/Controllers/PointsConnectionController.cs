@@ -26,7 +26,7 @@ namespace DeliveryService.API.Controllers
             {
                 return await ((PointsConnectionService)_service).GetAllAsync();
             }
-            catch(Exception ex)
+            catch
             {
                 return BadRequest("Error to retireve Data!");
             }
@@ -44,7 +44,7 @@ namespace DeliveryService.API.Controllers
 
                 return result;
             }
-            catch (Exception ex)
+            catch
             {
                 return BadRequest("Error to retrieve register");
             }
