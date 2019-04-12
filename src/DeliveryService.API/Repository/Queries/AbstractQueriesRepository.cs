@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 
 namespace DeliveryService.API.Queries
 {
+    /// <summary>
+    /// Abstract with methods to be implemented to database reading
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class AbstractQueriesRepository<T>
     {
         protected readonly string _connectionString;

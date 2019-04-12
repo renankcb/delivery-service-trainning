@@ -19,6 +19,12 @@ namespace DeliveryService.API.Controllers
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
+        /// <summary>
+        /// Return available routes, lowest time route and lowest cost route based on a Origin and Destination
+        /// </summary>
+        /// <param name="originId"></param>
+        /// <param name="destinationId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("getRouteFromOriginToDestination")]
         public async Task<ActionResult<ResultResponse<Routes>>> Get([FromQuery(Name = "originId")] int originId, [FromQuery(Name = "destinationId")]int destinationId)

@@ -3,6 +3,10 @@ using System.Linq;
 
 namespace DeliveryService.API.Model
 {
+    /// <summary>
+    /// Routes model, contains data related to routes from origin to destination, 
+    /// there are all availlable routes, lowest time route and lowest cost route
+    /// </summary>
     public class Routes
     {
         public Routes(int originId, int destinationId, List<PointsConnection> connections)
@@ -40,6 +44,11 @@ namespace DeliveryService.API.Model
 
         public List<List<PointsConnection>> RoutesAvailable { get; private set; }
 
+        /// <summary>
+        /// Logic where return all availlable routes with intermidiate points
+        /// </summary>
+        /// <param name="originId"></param>
+        /// <param name="visitedPoints"></param>
         private void FindRoutes(int originId, List<PointsConnection> visitedPoints)
         {
             if (originId != DestinationId)

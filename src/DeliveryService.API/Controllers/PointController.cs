@@ -19,6 +19,10 @@ namespace DeliveryService.API.Controllers
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
+        /// <summary>
+        /// Return all registers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<ResultResponse<IEnumerable<Point>>>> GetAsync()
         {
@@ -32,6 +36,11 @@ namespace DeliveryService.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Return specific register by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<ResultResponse<Point>>> GetAsync(int id)
@@ -50,6 +59,11 @@ namespace DeliveryService.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Add a new register
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<ResultResponse<Point>>> PostAsync(PostPointDto value)
         {
@@ -66,6 +80,11 @@ namespace DeliveryService.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Update an existent register
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<ResultResponse<Point>>> Put(PostPointDto value)
         {
@@ -82,6 +101,11 @@ namespace DeliveryService.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete a existent register
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<ResultResponse<Point>>> Delete(int id)
