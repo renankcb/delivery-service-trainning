@@ -32,20 +32,20 @@ A Delivery service to Company XPTO
 ## **API**
 ### **POINTS CONNECTIONS**
 /pointsConnection
-	GET -> get all registers
-	GET (/{id}) -> get specific register
-	PUT -> update specific register
-	POST -> save register
-	DELETE -> delete register
+	- GET -> get all registers
+	- GET (/{id}) -> get specific register
+	- PUT -> update specific register
+	- POST -> save register
+	- DELETE -> delete register
 	
 ### **POINTS**
 /point
-	GET -> get all registers from pointsConnection
-	GET (/{id}) -> get specific register from pointsConnection
-	PUT -> update specific register
-	POST -> save register
-	DELETE -> delete register
+	- GET -> get all registers from pointsConnection
+	- GET (/{id}) -> get specific register from pointsConnection
+	- PUT -> update specific register
+	- POST -> save register
+	- DELETE -> delete register
 	
 ### ROUTE
 /route
-	GET (/getRouteFromOriginToDestination?originId={id}&destinationId={id}) -> get all routes given a origin and destination
+	- GET (/getRouteFromOriginToDestination?originId={id}&destinationId={id}) -> get all routes given a origin and destination
