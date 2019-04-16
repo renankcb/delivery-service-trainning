@@ -3,9 +3,9 @@
 A Delivery service to Company XPTO
 
 ## **TECHNOLOGIES USED:**
-	- .NET Core 2.0
+	- .NET Core 2.2
 	- Dapper
-	- ED Core
+	- EF Core
 	- XUnit
 	
 ## **STRUCTURE**
