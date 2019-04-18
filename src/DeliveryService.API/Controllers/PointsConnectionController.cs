@@ -10,13 +10,13 @@ namespace DeliveryService.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PointController : ControllerBase
+    public class PointsConnectionController : ControllerBase
     {
-        private readonly BaseService<Point> _service;
+        private readonly BaseService<PointsConnection> _service;
 
-        public PointController(BaseService<Point> service)
+        public PointsConnectionController(BaseService<PointsConnection> service)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _service = (PointsConnectionService)service ?? throw new ArgumentNullException(nameof(service));
         }
 
         /// <summary>
@@ -24,15 +24,15 @@ namespace DeliveryService.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<ResultResponse<IEnumerable<Point>>>> GetAsync()
+        public async Task<ActionResult<ResultResponse<IEnumerable<PointsConnection>>>> Get()
         {
             try
             {
-                return await ((PointService)_service).GetAllAsync();
+                return await ((PointsConnectionService)_service).GetAllAsync();
             }
             catch
             {
-                return BadRequest("Error to retrieve data!");
+                return BadRequest("Error to retireve Data!");
             }
         }
 
@@ -43,11 +43,11 @@ namespace DeliveryService.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<ResultResponse<Point>>> GetAsync(int id)
+        public async Task<ActionResult<ResultResponse<PointsConnection>>> Get(int id)
         {
             try
             {
-                var result = await ((PointService)_service).GetByIdAsync(id);
+                var result = await ((PointsConnectionService)_service).GetByIdAsync(id);
                 if (result == null)
                     return NotFound();
 
@@ -55,7 +55,7 @@ namespace DeliveryService.API.Controllers
             }
             catch
             {
-                return BadRequest("Error to retrieve data!");
+                return BadRequest("Error to retrieve register");
             }
         }
 
@@ -65,14 +65,14 @@ namespace DeliveryService.API.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<ResultResponse<Point>>> PostAsync(PostPointDto value)
+        public async Task<ActionResult<ResultResponse<PointsConnection>>> Post(PostPointsConnectionDto value)
         {
             if (!value.IsValid())
                 return BadRequest("Invalida data!");
 
             try
             {
-                return await ((PointService)_service).SaveAsync(value.ToDomain());
+                return await ((PointsConnectionService)_service).SaveAsync(value.ToDomain());
             }
             catch (Exception ex)
             {
@@ -86,14 +86,14 @@ namespace DeliveryService.API.Controllers
         /// <param name="value"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<ResultResponse<Point>>> Put(PostPointDto value)
+        public async Task<ActionResult<ResultResponse<PointsConnection>>> Put(PostPointsConnectionDto value)
         {
             if (!value.IsValid())
                 return BadRequest("Invalida data!");
 
             try
             {
-                return await ((PointService)_service).UpdateAsync(value.ToDomain());
+                return await ((PointsConnectionService)_service).UpdateAsync(value.ToDomain());
             }
             catch (Exception ex)
             {
@@ -108,15 +108,15 @@ namespace DeliveryService.API.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult<ResultResponse<Point>>> Delete(int id)
+        public async Task<ActionResult<ResultResponse<PointsConnection>>> Delete(int id)
         {
             try
             {
-                return await ((PointService)_service).DeleteAsync(id);
+                return await ((PointsConnectionService)_service).DeleteAsync(id);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return BadRequest("Error to DeleteAsync register!");
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace DeliveryService.API.Dto
+﻿using DeliveryService.API.Model;
+
+namespace DeliveryService.API.Dto
 {
     public class PostPointDto
     {
@@ -6,8 +8,14 @@
 
         public string Name { get; set; }
 
-        public int Time { get; set; }
+        internal bool IsValid()
+        {
+            return !string.IsNullOrEmpty(this.Name);
+        }
 
-        public int Cost { get; set; }
+        internal Point ToDomain()
+        {
+            return new Point() { Id = this.Id, Name = this.Name };
+        }
     }
 }

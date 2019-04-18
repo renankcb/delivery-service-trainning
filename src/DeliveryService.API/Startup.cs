@@ -1,13 +1,13 @@
 ﻿using DeliveryService.API.Commands;
 using DeliveryService.API.Model;
 using DeliveryService.API.Queries;
+using DeliveryService.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace DeliveryService.API
 {
@@ -23,8 +23,13 @@ namespace DeliveryService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IQueriesService, QueriesService>(ctor => new QueriesService(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<ICommandService, CommandService>();
+            services.AddScoped<AbstractQueriesRepository<Point>, PointQueriesRepository>(ctor => new PointQueriesRepository(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<AbstractQueriesRepository<PointsConnection>, PointsConnectionQueriesRepository>(ctor => new PointsConnectionQueriesRepository(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<ICommandRepository<Point>, PointCommandRepository>();
+            services.AddScoped<ICommandRepository<PointsConnection>, PointsConnectionCommandRepository>();
+            services.AddScoped<BaseService<Point>, PointService>();
+            services.AddScoped<BaseService<PointsConnection>, PointsConnectionService>();
+            services.AddScoped<IRoutesService, RoutesService>();
 
             services.AddDbContext<DeliveryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
